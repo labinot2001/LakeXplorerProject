@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LakeXplorerProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LakeXplorerProject.Data
 {
@@ -10,6 +11,11 @@ namespace LakeXplorerProject.Data
 
 
         }
+
+        public DbSet<Lake> Lakes { get; set; }
+        public DbSet<LakeSighting> LakeSightings { get; set; }
+        public DbSet<Like> Likes { get; set; }
+
 
 
     }
