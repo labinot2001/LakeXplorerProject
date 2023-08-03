@@ -1,17 +1,22 @@
-﻿namespace LakeXplorerProject.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LakeXplorerProject.Models
 {
     public class LakeSighting
     {
-        public int Id { get; set; } // Primary key
+        [Key]
+        public int Id { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public string? Image { get; set; } // Store the image URL or local path
+        
+        // public int UserId { get; set; }   //Reference to the user
+        // public virtual User User { get; set; }  
+        public int LakeId { get; set; }
+        [ForeignKey("LakeId")]
+        public Lake Lake { get; set; }
 
-       // public int UserId { get; set; }   //Reference to the user
-       // public virtual User User { get; set; }  
-
-       // public int LakeId { get; set; } // Reference to the lake
-       // public virtual Lake Lake { get; set; } 
 
 
     }
