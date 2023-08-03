@@ -7,5 +7,10 @@
         public string? Image { get; set; } // Store the image URL or local path
         public string? Description { get; set; }
 
+
+        //Relationships
+        public List<LakeSighting> LakeSightings { get; set; }
+
+
     }
 }
