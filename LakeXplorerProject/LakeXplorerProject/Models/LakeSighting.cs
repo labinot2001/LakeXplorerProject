@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LakeXplorerProject.Data.Base;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LakeXplorerProject.Models
 {
-    public class LakeSighting
+    public class LakeSighting : IEntityBase
     {
         [Key]
         public int Id { get; set; }

@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LakeXplorerProject.Data.Base;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LakeXplorerProject.Models
 {
-    public class Like
+    public class Like : IEntityBase
     {
         [Key]
         public int Id { get; set; }
