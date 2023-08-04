@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Lake>  
+
+
+
+<h1>Hello Lake View</h1>
+
+
+<h3>Name of Lake</h3>
+<h3>
+   @foreach (var item in Model)
+                {
+
+        <br />
+
+        @Html.DisplayFor(model => item.Name)
+
+                   
+                }
+   
+
+
+</h3>
+
