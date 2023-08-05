@@ -5,7 +5,7 @@ namespace LakeXplorerProject.Data.Services
 {
     public interface ILakeServices : IEntityBaseRepository<Lake>
     {
-        Task<Lake> GetCarByIdAsync(int id);
+        Task<Lake> GetLakeByIdAsync(int id);
         Task AddNewLakeAsync(Lake data);
         Task UpdateLakeAsync(Lake data);
         Task DeleteAsync(int id);

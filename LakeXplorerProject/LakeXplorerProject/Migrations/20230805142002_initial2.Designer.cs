@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LakeXplorerProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230803223351_Initial")]
-    partial class Initial
+    [Migration("20230805142002_initial2")]
+    partial class initial2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,9 @@ namespace LakeXplorerProject.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
