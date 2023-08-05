@@ -1,6 +1,7 @@
 using LakeXplorerProject.Data;
 using LakeXplorerProject.Data.Services;
 using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp.Web.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 //Services configuration
 builder.Services.AddScoped<ILakeServices, LakeService>();
 
-
+// Add ImageSharp middleware for image processing
+builder.Services.AddImageSharp();
 
 
 
