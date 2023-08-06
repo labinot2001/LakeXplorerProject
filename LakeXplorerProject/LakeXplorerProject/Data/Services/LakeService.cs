@@ -52,7 +52,6 @@ namespace LakeXplorerProject.Data.Services
             }
         }
 
-
         public async Task DeleteAsync(int id)
         {
             var result = await _context.Lakes.FirstOrDefaultAsync(n => n.Id == id);
@@ -60,7 +59,7 @@ namespace LakeXplorerProject.Data.Services
             await _context.SaveChangesAsync();
         }
 
-
+        
 
 
 

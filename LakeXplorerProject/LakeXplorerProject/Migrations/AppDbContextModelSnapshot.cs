@@ -57,6 +57,9 @@ namespace LakeXplorerProject.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("ImageData")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int>("LakeId")
                         .HasColumnType("int");
 

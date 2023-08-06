@@ -14,5 +14,7 @@ namespace LakeXplorerProject.Data.Services
         //Task UpdateLakeAsync(NewLakeVM data);
         //Task<NewLakeDropdownsVM> GetNewLakeDropdownsValues();
 
+        
+
     }
 }
