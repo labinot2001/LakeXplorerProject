@@ -5,7 +5,7 @@
 namespace LakeXplorerProject.Migrations
 {
     /// <inheritdoc />
-    public partial class initial2 : Migration
+    public partial class initial3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,6 +35,7 @@ namespace LakeXplorerProject.Migrations
                     Longitude = table.Column<double>(type: "float", nullable: false),
                     Latitude = table.Column<double>(type: "float", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     LakeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

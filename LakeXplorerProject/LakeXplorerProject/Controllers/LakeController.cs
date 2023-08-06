@@ -5,6 +5,7 @@ using System.Diagnostics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using LakeXplorerProject.Data.ViewModels;
 
 namespace LakeXplorerProject.Controllers
 {
@@ -12,12 +13,14 @@ namespace LakeXplorerProject.Controllers
     {
 
         private readonly ILakeServices _service;
+        private readonly ILakeSightingService _LakeSightingservice;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
      
-        public LakeController(ILakeServices service, IWebHostEnvironment webHostEnvironment)
+        public LakeController(ILakeServices service, ILakeSightingService LakeSightingservice, IWebHostEnvironment webHostEnvironment)
         {
             _service = service;
+            _LakeSightingservice = LakeSightingservice;
             _webHostEnvironment = webHostEnvironment;
         }
 
@@ -31,66 +34,25 @@ namespace LakeXplorerProject.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var lakeDetails = await _service.GetLakeByIdAsync(id);
+            var lakeSightings = _LakeSightingservice.GetLakeSightingsByLakeId(id);
+
+            var viewModel = new LakeVM
+            {
+                Lake = lakeDetails,
+                LakeSightings = lakeSightings
+
+            };
+
+
             if (lakeDetails == null) return View("Not Found");
-            return View(lakeDetails);
+            return View(viewModel);
         }
 
         public IActionResult Create()
         {
             return View();
         }
-        //[HttpPost]
-        //public async Task<IActionResult> Create(Lake lake)
-        //{
-        //    if (!ModelState.IsValid) return View(lake);
-
-        //    await _service.AddNewLakeAsync(lake);
-
-        //    Debug.WriteLine("Lake has been added");
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Create(Lake lake, IFormFile imageFile)
-        //{
-        //    if (!ModelState.IsValid) return View(lake);
-
-        //    // Nëse përdoruesi ka ngarkuar fotografi
-        //    if (imageFile != null && imageFile.Length > 0)
-        //    {
-        //        // Krijoj një lokacion për ruajtjen e fotosë në server
-        //        string uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
-
-        //        // Krijoj folderin nëse nuk ekziston
-        //        if (!Directory.Exists(uploadFolder))
-        //            Directory.CreateDirectory(uploadFolder);
-
-        //        // Gjenero një emër unik për fotografinë
-        //        string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
-
-        //        // Krijojë pathin e plotë për ruajtjen e fotosë
-        //        string filePath = Path.Combine(uploadFolder, uniqueFileName);
-
-        //        // Ruaj fotonë në server
-        //        using (var stream = new FileStream(filePath, FileMode.Create))
-        //        {
-        //            await imageFile.CopyToAsync(stream);
-        //        }
-
-        //        // Vendosni emrin e fajllit në modelin e Lake për ta ruajtur në bazën e të dhënave
-        //        lake.Image = uniqueFileName;
-
-        //    }
-
-        //    await _service.AddNewLakeAsync(lake);
-
-        //    Debug.WriteLine("Lake has been added");
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-
+        
 
 
         [HttpPost]
@@ -98,6 +60,7 @@ namespace LakeXplorerProject.Controllers
         {
             if (!ModelState.IsValid)
             {
+      
                 return View(lake);
             }
 
@@ -136,41 +99,6 @@ namespace LakeXplorerProject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        //[HttpPost]
-        //public async Task<IActionResult> Create([FromForm] Lake lake)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(lake);
-        //    }
-
-        //    // If the user has uploaded an image
-        //    if (lake.ImageFile != null && lake.ImageFile.Length > 0)
-        //    {
-
-
-
-
-
-
-
-        //        using (var memoryStream = new MemoryStream())
-        //        {
-        //            await lake.ImageFile.CopyToAsync(memoryStream);
-        //            lake.ImageData = memoryStream.ToArray();
-        //        }
-
-
-
-        //    }
-
-        //    await _service.AddNewLakeAsync(lake);
-
-        //    Debug.WriteLine("Lake has been added");
-
-        //    return RedirectToAction(nameof(Index));
-        //}
 
 
         public async Task<IActionResult> Edit(int id)
