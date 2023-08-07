@@ -1,4 +1,5 @@
-﻿using LakeXplorerProject.Models;
+﻿using LakeXplorerProject.Data.Services;
+using LakeXplorerProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,15 +8,18 @@ namespace LakeXplorerProject.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ILakeServices _service;
+        public HomeController(ILogger<HomeController> logger, ILakeServices service)
         {
             _logger = logger;
+            _service = service;
+
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult>  Index()
         {
-            return View();
+            var allLakes = await _service.GetAllAsync();
+            return View(allLakes);
         }
 
         public IActionResult Privacy()
