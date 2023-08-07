@@ -1,5 +1,8 @@
 using LakeXplorerProject.Data;
 using LakeXplorerProject.Data.Services;
+using LakeXplorerProject.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp.Web.DependencyInjection;
 
@@ -18,6 +21,26 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 //Services configuration
 builder.Services.AddScoped<ILakeServices, LakeService>();
 builder.Services.AddScoped<ILakeSightingService, LakeSightingService>();
+
+//Authentication and authorization
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+});
+builder.Services.AddAuthorization(options =>
+{
+
+    options.AddPolicy("Admin",
+        authBuilder =>
+        {
+            authBuilder.RequireRole("Admin");
+        });
+
+});
+
 
 
 // Add ImageSharp middleware for image processing
@@ -46,5 +69,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+//Seed database
+AppDbInitializer.Seed(app);
+AppDbInitializer.SeedUsersAndRolesAsync(app).Wait();
 
 app.Run();
