@@ -2,9 +2,12 @@ using LakeXplorerProject.Data;
 using LakeXplorerProject.Data.Services;
 using LakeXplorerProject.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,31 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 });
+
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; // Set JWT as the default authentication scheme for API controllers
+//})
+//.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+//{
+//    // Configure cookie-based authentication settings if needed
+//    // options.Cookie.Name = "YourCookieName";
+//})
+//.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+//{
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateIssuerSigningKey = true,
+//        ValidIssuer = "your_issuer", // Replace with your JWT issuer
+//        ValidAudience = "your_audience", // Replace with your JWT audience
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key")) // Replace with your secret key
+//    };
+//});
+
+
 builder.Services.AddAuthorization(options =>
 {
 
