@@ -1,5 +1,7 @@
-﻿@model IEnumerable<Lake>  
-
+﻿@using LakeXplorerProject.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager;
+@model IEnumerable<Lake>  
 @{
     int counter=0;
     ViewData["Title"] = "Home Page";
@@ -51,14 +53,38 @@
       <nav id="navbar" class="navbar">
         <ul>
           <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-          <li><a class="nav-link scrollto" href="#about">About Us</a></li>
+          <li><a class="nav-link scrollto" href="#lakes">About Us</a></li>
           <li><a class="nav-link scrollto" asp-action="Index" asp-controller="Lake">Lakes</a></li>
-          <li><a class="nav-link scrollto" href="#team">Team</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+        @if(!User.Identity.IsAuthenticated)
+{
+<!-- Login Register button-->
+       <a style="height:85%" class="nav-link scrollto" asp-controller="Account" asp-action="Login">
+        <i class="bi bi-box-arrow-in-right"></i> Log in
+    </a>
+    
+    <a style="height:85%" class="nav-link scrollto" asp-controller="Account" asp-action="Register">
+        <i class="bi bi-box-arrow-in-right"></i> Register
+    </a>
 
-         <li><a class="nav-link scrollto"  asp-action="Login" asp-controller="Account">Login</a></li>
-         <li><a class="nav-link scrollto"  asp-action="Register" asp-controller="Account">Register</a></li>
-         
+}
+
+else{
+
+    <div style="height:85%;margin-top:5px;">
+        <button style="height: 85%;font-size:12px;" class="btn btn-outline-success my-2 my-sm-1" type="button">
+            <i class="bi bi-person-badge"></i> @UserManager.GetUserName(User)
+        </button>
+    </div>
+      
+      <span style="padding:5px;"></span>
+    <form style="height:85%;" asp-controller="Account" asp-action="Logout">
+        <button style="height:85%;" class="btn btn-outline-danger my-2 my-sm-1">
+            <i class="bi bi-box-arrow-in-right"></i> Log Out
+        </button>
+    </form>
+
+}
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->

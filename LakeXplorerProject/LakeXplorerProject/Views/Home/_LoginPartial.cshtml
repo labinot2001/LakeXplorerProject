@@ -1,0 +1,37 @@
+﻿@using LakeXplorerProject.Models
+@using Microsoft.AspNetCore.Identity
+@*@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager*@
+@inject UserManager<ApplicationUser> UserManager;
+
+@if(!User.Identity.IsAuthenticated)
+{
+<!-- Login Register button-->
+       <a style="height:85%" class="btn btn-outline-success my-2 my-sm-1" asp-controller="Account" asp-action="Login">
+        <i class="bi bi-box-arrow-in-right"></i> Log in
+    </a>
+    
+    <a style="height:85%" class="btn btn-outline-primary my-2 my-sm-1" asp-controller="Account" asp-action="Register">
+        <i class="bi bi-box-arrow-in-right"></i> Register
+    </a>
+
+}
+
+else{
+
+    <div style="height:85%;margin-top:5px;">
+        <button style="height: 85%;font-size:12px;" class="btn btn-outline-success my-2 my-sm-1" type="button">
+            <i class="bi bi-person-badge"></i> @UserManager.GetUserName(User)
+        </button>
+    </div>
+      
+      <span style="padding:5px;"></span>
+    <form style="height:85%;" asp-controller="Account" asp-action="Logout">
+        <button style="height:85%;" class="btn btn-outline-danger my-2 my-sm-1">
+            <i class="bi bi-box-arrow-in-right"></i> Log Out
+        </button>
+    </form>
+
+}
+

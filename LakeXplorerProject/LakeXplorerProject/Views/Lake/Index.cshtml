@@ -76,5 +76,9 @@ body{
 </div>
 
 
+  @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+{
+@await Html.PartialAsync("_CreateItem", "Lake")    
 
-@await Html.PartialAsync("_CreateItem", "Lake")
+}
+
