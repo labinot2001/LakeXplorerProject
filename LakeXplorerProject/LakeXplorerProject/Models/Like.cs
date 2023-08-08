@@ -15,7 +15,13 @@ namespace LakeXplorerProject.Models
         //Like
         public int LakeSightingId { get; set; }
         [ForeignKey("LakeSightingId")]
-        public LakeSighting LakeSightings { get; set; }
+        public LakeSighting? LakeSightings { get; set; }
+
+        public string? UserId { get; set; }
+
+        [ForeignKey(nameof(UserId))]
+        public  ApplicationUser? User { get; set; }
+
 
 
     }
