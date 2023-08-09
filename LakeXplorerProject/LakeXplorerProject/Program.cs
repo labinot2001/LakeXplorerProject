@@ -24,6 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 //Services configuration
 builder.Services.AddScoped<ILakeServices, LakeService>();
 builder.Services.AddScoped<ILakeSightingService, LakeSightingService>();
+builder.Services.AddScoped<ILikeService, LikeService>();
 
 //Authentication and authorization
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
