@@ -93,6 +93,15 @@ namespace LakeXplorerProject.Data.Services
             return lakeSightings;
         }
 
+        public async Task<int> GetUpdatedLikeCountAsync(int lakeSightingId)
+        {
+            var likeCount = await _context.Likes
+                .Where(like => like.LakeSightingId == lakeSightingId)
+                .CountAsync();
+
+            return likeCount;
+        }
+
 
     }
 }

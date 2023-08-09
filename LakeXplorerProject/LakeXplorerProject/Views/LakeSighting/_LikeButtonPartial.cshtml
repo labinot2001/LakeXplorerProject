@@ -1,0 +1,8 @@
+﻿@model LakeXplorerProject.Data.ViewModels.LakeSightingVM
+
+@if (User.Identity.IsAuthenticated)
+{
+    <button class="like-button" data-lake-sighting-id="@Model.Id">Like</button>
+    <button class="unlike-button" data-lake-sighting-id="@Model.Id">Unlike</button>
+}
+<span class="like-count" data-lake-sighting-id="@Model.Id">@Model.LikeCount Likes</span>

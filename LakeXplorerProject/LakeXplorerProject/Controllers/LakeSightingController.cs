@@ -1,4 +1,5 @@
-﻿using LakeXplorerProject.Data.Services;
+﻿using LakeXplorerProject.Data;
+using LakeXplorerProject.Data.Services;
 using LakeXplorerProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,12 +15,15 @@ namespace LakeXplorerProject.Controllers
         private readonly ILakeSightingService _service;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
-
-        public LakeSightingController(ILakeSightingService service, IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
+        private readonly ILikeService _likeService;
+        private readonly AppDbContext _appcontext;
+        public LakeSightingController(ILakeSightingService service, IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager, ILikeService likeService, AppDbContext appcontext)
         {
             _service = service;
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
+            _likeService = likeService;
+            _appcontext = appcontext;
         }
 
        
@@ -154,6 +158,49 @@ namespace LakeXplorerProject.Controllers
         }
 
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        
+        public async Task <JsonResult> LikePost(int lakeSightingId)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Json(new { error = "User not authenticated" });
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            await _likeService.LikeLakeSightingAsync(user.Id, lakeSightingId);
+
+            var updatedLikeCount = await _service.GetUpdatedLikeCountAsync(lakeSightingId);
+
+            return Json(new { likeCount = updatedLikeCount });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+       
+        public async Task<JsonResult> UnlikePost(int likeId)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Json(new { error = "User not authenticated" });
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+
+            var like = await _appcontext.Likes.FindAsync(likeId);
+            if (like == null)
+            {
+                return Json(new { error = "Like not found" });
+            }
+
+            await _likeService.UnlikeLakeSightingAsync(user.Id, likeId);
+
+            var updatedLikeCount = await _service.GetUpdatedLikeCountAsync(like.LakeSightingId);
+
+            return Json(new { likeCount = updatedLikeCount });
+        }
 
     }
 }

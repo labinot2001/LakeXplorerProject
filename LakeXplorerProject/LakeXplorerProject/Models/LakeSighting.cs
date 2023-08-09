@@ -22,6 +22,6 @@ namespace LakeXplorerProject.Models
         [ForeignKey(nameof(UserId))]
         public ApplicationUser? User { get; set; }
 
-
+        public int LikeCount { get; set; }
     }
 }

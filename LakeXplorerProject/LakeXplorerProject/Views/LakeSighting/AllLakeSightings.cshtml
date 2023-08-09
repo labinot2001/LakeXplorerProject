@@ -23,6 +23,7 @@ body{
 
                 @foreach (var item in Model)
                 {
+
                 <tr>
                     <td class="align-middle">
                    
@@ -52,8 +53,16 @@ body{
                         @Html.DisplayFor(modelItem => item.Lake.Name)
 
                     </td>
-                    <td class="align-middle">
-                    </td>
+                     
+                              <td class="align-middle">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button class="like-button" data-lake-sighting-id="@item.Id">Like</button>
+                <button class="unlike-button" data-like-id="0">Unlike</button> <!-- Initial value, will be updated in script -->
+            }
+            <span class="like-count" data-lake-sighting-id="@item.Id">@item.LikeCount Likes</span>
+        </td>
+                        
                     
                     @*}*@
 
@@ -69,5 +78,52 @@ body{
     </div>
 </div>
 
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            function updateLikeCount(lakeSightingId, newLikeCount) {
+                $(".like-count[data-lake-sighting-id='" + lakeSightingId + "']").text(newLikeCount + " Likes");
+            }
 
+            $(".like-button").click(function () {
+                var lakeSightingId = $(this).data("lake-sighting-id");
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("LikePost", "LakeSighting")",
+                    data: { lakeSightingId: lakeSightingId },
+                    dataType: "json", 
+                    success: function (data) {
+                        console.log("Success:", data);
+                        updateLikeCount(lakeSightingId, data.likeCount);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error:", error);
+                        console.log("Status:", status);
+                        console.log("Response:", xhr.responseText);
+                    }
+                });
+            });
+
+            $(".unlike-button").click(function () {
+                var lakeSightingId = $(this).data("lake-sighting-id");
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UnlikePost", "LakeSighting")",
+                    data: { lakeSightingId: lakeSightingId },
+                    dataType: "json", 
+                    success: function (data) {
+                        console.log("Success:", data);
+                        updateLikeCount(lakeSightingId, data.likeCount);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error:", error);
+                        console.log("Status:", status);
+                        console.log("Response:", xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+}
