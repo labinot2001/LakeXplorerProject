@@ -14,6 +14,6 @@ namespace LakeXplorerProject.Data.Services
         Task<List<LakeSighting>> GetLakeSightingsByUserId(string userId);
         Task<NewLakeDropdownsVM> GetNewLakeDropdownsValues();
         List<LakeSighting> GetLakeSightingsByLakeId(int lakeId);
-
+        Task<int> GetUpdatedLikeCountAsync(int lakeSightingId);
     }
 }
