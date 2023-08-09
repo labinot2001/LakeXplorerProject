@@ -51,21 +51,21 @@ namespace LakeXplorerProject.Data
 
                 //User section
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                var adminUser = await userManager.FindByEmailAsync("admin@ubt-uni.net");
+                var adminUser = await userManager.FindByEmailAsync("admin@gmail.com");
                 if (adminUser == null)
                 {
                     var newAdminUser = new ApplicationUser()
                     {
                         FullName = "Application Admin",
                         UserName = "app-admin",
-                        Email = "admin@ubt-uni.net",
+                        Email = "admin@gmail.com",
                         EmailConfirmed = true
                     };
-                    await userManager.CreateAsync(newAdminUser, "Coding@1234?");
+                    await userManager.CreateAsync(newAdminUser, "Labinot1234@.");
                     await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
 
                 }
-                var appUser = await userManager.FindByEmailAsync("labinot.krasniqi@gmail.com");
+                var appUser = await userManager.FindByEmailAsync("user@gmail.com");
                 if (appUser == null)
                 {
                     var newAppUser = new ApplicationUser()
@@ -75,7 +75,7 @@ namespace LakeXplorerProject.Data
                         Email = "user@gmail.com",
                         EmailConfirmed = true
                     };
-                    await userManager.CreateAsync(newAppUser, "Coding@1234?");
+                    await userManager.CreateAsync(newAppUser, "Labinot1234@.");
                     await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
                 }
             }

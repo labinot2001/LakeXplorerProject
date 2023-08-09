@@ -16,7 +16,7 @@ namespace LakeXplorerProject.Data.Services
             _context = context;
         }
 
-        public async Task AddNewLakeSightingAsync(LakeSighting data)
+        public async Task AddNewLakeSightingAsync(LakeSighting data, string id)
         {
             var newLakeSighting = new LakeSighting()
             {
@@ -25,6 +25,7 @@ namespace LakeXplorerProject.Data.Services
                Image = data.Image,
                ImageData = data.ImageData,
                LakeId = data.LakeId,
+               UserId = id
 
             };
             await _context.LakeSightings.AddAsync(newLakeSighting);
@@ -81,6 +82,17 @@ namespace LakeXplorerProject.Data.Services
                 .Where(ls => ls.LakeId == lakeId)
                 .ToList();
         }
+
+
+        public async Task<List<LakeSighting>> GetLakeSightingsByUserId(string userId)
+        {
+            var lakeSightings = await _context.LakeSightings
+                .Where(ls => ls.UserId == userId)
+                .ToListAsync();
+
+            return lakeSightings;
+        }
+
 
     }
 }

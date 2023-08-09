@@ -1,0 +1,49 @@
+﻿
+@model LakeSighting
+
+<style>
+    body {
+        background-color: whitesmoke;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="card mb-12">
+            <div class="row g-0">
+                <div class="col-md-12">
+                    <div class="card-header text-white bg-dark " @*style="background-color:#0057D9;"*@>
+                        <p class="card-text">
+
+                            <h5 class="card-title">
+                                <h3>LakeSighting Longitude: @Model.Longitude </h3>
+                                <h3>LakeSighting Latitude: @Model.Latitude </h3>
+
+                            </h5>
+                        </p>
+                    </div>
+                </div>
+
+                @if (Model.ImageData != null)
+                {
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.ImageData)" style="height:450px; width:1015px;" />
+                }
+                else
+                {
+                    <p>No image available</p>
+                }
+               
+               
+
+                <div class="btn-group">
+                    <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
