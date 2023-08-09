@@ -8,10 +8,10 @@ namespace LakeXplorerProject.Data.Services
     {
 
         Task<LakeSighting> GetLakeSightingByIdAsync(int id);
-        Task AddNewLakeSightingAsync(LakeSighting data);
+        Task AddNewLakeSightingAsync(LakeSighting data, string id);
         Task UpdateLakeSightingAsync(LakeSighting data);
         Task DeleteAsync(int id);
-
+        Task<List<LakeSighting>> GetLakeSightingsByUserId(string userId);
         Task<NewLakeDropdownsVM> GetNewLakeDropdownsValues();
         List<LakeSighting> GetLakeSightingsByLakeId(int lakeId);
 
