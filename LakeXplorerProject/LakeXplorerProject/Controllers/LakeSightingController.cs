@@ -1,5 +1,7 @@
 ﻿using LakeXplorerProject.Data.Services;
 using LakeXplorerProject.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SixLabors.ImageSharp.Formats.Jpeg;
@@ -11,21 +13,36 @@ namespace LakeXplorerProject.Controllers
 
         private readonly ILakeSightingService _service;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-
-        public LakeSightingController(ILakeSightingService service, IWebHostEnvironment webHostEnvironment)
+        public LakeSightingController(ILakeSightingService service, IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
         {
             _service = service;
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
-
+       
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var allLakes = await _service.GetAllAsync();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
+            var lakeSightings = await _service.GetLakeSightingsByUserId(user.Id);
+
+            return View(lakeSightings);
+
+        }
+        public async Task<IActionResult> AllLakeSightings()
+        {
+            var allLakes = await _service.GetAllAsync();
             return View(allLakes);
         }
+
 
         public async Task<IActionResult> Create()
         {
@@ -78,11 +95,63 @@ namespace LakeXplorerProject.Controllers
                 }
             }
 
-            await _service.AddNewLakeSightingAsync(lakesighting);
+            var user = await _userManager.GetUserAsync(User);
+
+            await _service.AddNewLakeSightingAsync(lakesighting, user.Id);
 
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Details(int id)
+        {
+            var lakeSightingDetails = await _service.GetLakeSightingByIdAsync(id);
 
+            if (lakeSightingDetails == null) return View("Not Found");
+            return View(lakeSightingDetails);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var lakeDetails = await _service.GetLakeSightingByIdAsync(id);
+            if (lakeDetails == null) return View("Not Found");
+
+            var lakeDropdownsData = await _service.GetNewLakeDropdownsValues();
+            ViewBag.Lake = new SelectList(lakeDropdownsData.Lakes, "Id", "Name");
+
+            return View(lakeDetails);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, LakeSighting lakesighting)
+        {
+            if (!ModelState.IsValid) return View(lakesighting);
+            if (id == lakesighting.Id)
+            {
+                await _service.UpdateLakeSightingAsync(lakesighting);
+                return RedirectToAction(nameof(Index));
+            }
+
+            var lakeDropdownsData = await _service.GetNewLakeDropdownsValues();
+
+            ViewBag.Lake = new SelectList(lakeDropdownsData.Lakes, "Id", "Name");
+
+            return View(lakesighting);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var lakesightingDetails = await _service.GetLakeSightingByIdAsync(id);
+            if (lakesightingDetails == null) return View("Not Found");
+            return View(lakesightingDetails);
+        }
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var lakeDetails = await _service.GetLakeSightingByIdAsync(id);
+            if (lakeDetails == null) return View("Not Found");
+
+            await _service.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+
+        }
 
 
 
