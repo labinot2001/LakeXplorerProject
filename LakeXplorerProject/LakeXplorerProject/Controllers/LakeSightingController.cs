@@ -159,7 +159,6 @@ namespace LakeXplorerProject.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         
         public async Task <JsonResult> LikePost(int lakeSightingId)
         {
@@ -178,7 +177,7 @@ namespace LakeXplorerProject.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        
        
         public async Task<JsonResult> UnlikePost(int likeId)
         {

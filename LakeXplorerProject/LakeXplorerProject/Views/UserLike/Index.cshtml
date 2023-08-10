@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Like>
+
+<h2>User Likes</h2>
+
+@foreach (var like in Model)
+{
+    <div class="like-item">
+     <h3>User: @like.User</h3>@like.User
+        <h3>Likeid: @like.Id</h3>
+
+    </div>
+}

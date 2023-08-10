@@ -37,5 +37,13 @@ namespace LakeXplorerProject.Data.Services
                 await _context.SaveChangesAsync();
             }
         }
+
+
+        public IEnumerable<Like> GetUserLikes(string userId)
+        {
+            return _context.Likes.Where(l => l.UserId == userId).ToList();
+        }
+
+
     }
 }
