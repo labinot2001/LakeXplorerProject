@@ -159,6 +159,7 @@ namespace LakeXplorerProject.Controllers
 
 
         [HttpPost]
+
         
         public async Task <JsonResult> LikePost(int lakeSightingId)
         {
@@ -177,7 +178,7 @@ namespace LakeXplorerProject.Controllers
         }
 
         [HttpPost]
-        
+
        
         public async Task<JsonResult> UnlikePost(int likeId)
         {
