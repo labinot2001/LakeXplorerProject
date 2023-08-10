@@ -59,6 +59,14 @@ body{
             {
                 <button class="like-button" data-lake-sighting-id="@item.Id">Like</button>
                 <button class="unlike-button" data-like-id="0">Unlike</button> <!-- Initial value, will be updated in script -->
+            
+                <div class="lake-sighting">
+    <!-- ... të dhënat e shenjimit të liqenit ... -->
+   @* <button class="like-button" data-lake-sighting-id="@item.Id">Like</button>
+    <span class="like-count">@item.LikeCount</span>*@
+</div>
+            
+            
             }
             <span class="like-count" data-lake-sighting-id="@item.Id">@item.LikeCount Likes</span>
         </td>
@@ -111,7 +119,7 @@ body{
                 $.ajax({
                     type: "POST",
                     url: "@Url.Action("UnlikePost", "LakeSighting")",
-                    data: { lakeSightingId: lakeSightingId },
+                    data: { likeId: lakeSightingId },
                     dataType: "json", 
                     success: function (data) {
                         console.log("Success:", data);
@@ -127,3 +135,33 @@ body{
         });
     </script>
 }
+
+
+
+@*@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".like-button").on("click", function () {
+                var lakeSightingId = $(this).data("lake-sighting-id");
+                likeLakeSighting(lakeSightingId);
+            });
+        });
+
+        function likeLakeSighting(lakeSightingId) {
+            $.ajax({
+                type: "POST",
+                url: "/LakeSighting/LikePost",
+                data: { lakeSightingId: lakeSightingId },
+                success: function (data) {
+                    if (data.likeCount !== undefined) {
+                        $(".like-count").text(data.likeCount);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+}*@
