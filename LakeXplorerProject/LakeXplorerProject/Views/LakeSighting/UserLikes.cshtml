@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Like>
+
+    <style>
+    
+    body{
+
+        background-color: whitesmoke;
+    }
+    </style>
+
+<h2>User Likes:</h2>
+
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Like ID</th>
+      <th scope="col">LakeSighting ID</th>
+      <th scope="col">User</th>
+      <th scope="col">User ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    
+    @foreach (var like in Model)
+{
+    <tr>
+      <th scope="row">@like.Id</th>
+      <td>@like.LakeSightingId</td>
+      <td>@like.User</td>
+      <td>@like.UserId</td>
+    </tr>
+}
+
+  </tbody>
+</table>
+
+
+<button asp-controller="Home" asp-action="Index" >Back to Home</button>

@@ -14,7 +14,8 @@ body{
             <thead>
                 <tr class="">
                     
-                    <th>Image</th>
+                    <th>LakeSighting Image</th>
+                    @*<th>LakeName</th>*@
                     <th>@Html.DisplayNameFor(model => model.Longitude)</th>
                     <th>@Html.DisplayNameFor(model => model.Latitude)</th>
                 </tr>
@@ -44,31 +45,27 @@ body{
                     <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.Longitude)
                     </td>
-
                     <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.Latitude)
-
                     </td>
                      <td class="align-middle">
                         @Html.DisplayFor(modelItem => item.Lake.Name)
-
                     </td>
+
                      
                               <td class="align-middle">
             @if (User.Identity.IsAuthenticated)
             {
-                <button class="like-button" data-lake-sighting-id="@item.Id">Like</button>
-                <button class="unlike-button" data-like-id="0">Unlike</button> <!-- Initial value, will be updated in script -->
-            
-                <div class="lake-sighting">
-    <!-- ... të dhënat e shenjimit të liqenit ... -->
-   @* <button class="like-button" data-lake-sighting-id="@item.Id">Like</button>
-    <span class="like-count">@item.LikeCount</span>*@
-</div>
-            
-            
-            }
-            <span class="like-count" data-lake-sighting-id="@item.Id">@item.LikeCount Likes</span>
+                               <button class="like-button" data-lake-sighting-id="@item.Id">Like</button>
+                               <button class="unlike-button" data-like-id="@item.Id">Unlike</button>
+
+                                <div class="lake-sighting">
+                                </div>
+
+
+                            }
+                            <span class="like-count" id="likeCountid" data-lake-sighting-id="@item.Id">@item.LikeCount Likes</span>
+                            
         </td>
                         
                     
@@ -77,6 +74,8 @@ body{
 
                 </tr>
                 }
+
+
             </tbody>
         </table>
     </div>
@@ -87,8 +86,33 @@ body{
 
     <script>
         $(document).ready(function () {
+        function updateLikeCounts() {
+            $(".like-count").each(function () {
+                var lakeSightingId = $(this).data("lake-sighting-id");
+                
+                $.ajax({
+                    url: "/LakeSighting/LikeCount", 
+                    type: "POST",
+                    data: { LakeSightingId: lakeSightingId },
+                    success: function (data) {
+                        $(this).text(data + " Likes");
+                    }.bind(this),
+                    error: function (xhr, status, error) {
+                        console.log("Error: " + error);
+                    }
+                });
+            });
+        }
+        setInterval(updateLikeCounts, 10000);
+        updateLikeCounts();
+    });
+
+
+        $(document).ready(function () {
+            
             function updateLikeCount(lakeSightingId, newLikeCount) {
                 $(".like-count[data-lake-sighting-id='" + lakeSightingId + "']").text(newLikeCount + " Likes");
+            
             }
 
             $(".like-button").click(function () {
@@ -111,15 +135,15 @@ body{
             });
 
             $(".unlike-button").click(function () {
-                var lakeSightingId = $(this).data("lake-sighting-id");
+                 var likeId = $(this).data("like-id")
                 $.ajax({
                     type: "POST",
                     url: "@Url.Action("UnlikePost", "LakeSighting")",
-                    data: { likeId: lakeSightingId },
+                    data: { likeId: likeId  },
                     dataType: "json", 
                     success: function (data) {
                         console.log("Success:", data);
-                        updateLikeCount(lakeSightingId, data.likeCount);
+                        updateLikeCount(likeId, data.likeCount);
                     },
                     error: function (xhr, status, error) {
                         console.log("Error:", error);
@@ -128,6 +152,9 @@ body{
                     }
                 });
             });
+
+
+
         });
     </script>
 }

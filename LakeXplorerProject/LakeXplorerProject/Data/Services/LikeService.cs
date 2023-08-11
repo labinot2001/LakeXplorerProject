@@ -13,6 +13,8 @@ namespace LakeXplorerProject.Data.Services
             _context = context;
         }
 
+        
+
         public async Task LikeLakeSightingAsync(string userId, int lakeSightingId)
         {
             var like = new Like
@@ -25,10 +27,10 @@ namespace LakeXplorerProject.Data.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UnlikeLakeSightingAsync(string userId, int likeId)
+        public async Task UnlikeLakeSightingAsync(string userId, int lakeSightingId)
         {
             var like = await _context.Likes
-                .Where(l => l.Id == likeId && l.UserId == userId)
+                .Where(l => l.LakeSightingId == lakeSightingId && l.UserId == userId)
                 .FirstOrDefaultAsync();
 
             if (like != null)
@@ -38,12 +40,10 @@ namespace LakeXplorerProject.Data.Services
             }
         }
 
-
-        public IEnumerable<Like> GetUserLikes(string userId)
+        public async Task<IEnumerable<Like>> GetUserLikes(string userId)
         {
-            return _context.Likes.Where(l => l.UserId == userId).ToList();
+            return await _context.Likes.Where(l => l.UserId == userId).ToListAsync();
         }
-
 
     }
 }

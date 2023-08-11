@@ -25,7 +25,8 @@ namespace LakeXplorerProject.Data.Services
                Image = data.Image,
                ImageData = data.ImageData,
                LakeId = data.LakeId,
-               UserId = id
+               UserId = id,
+               LikeCount= data.LikeCount,
 
             };
             await _context.LakeSightings.AddAsync(newLakeSighting);

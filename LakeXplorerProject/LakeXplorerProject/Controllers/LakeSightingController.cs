@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using System.Diagnostics;
 
 namespace LakeXplorerProject.Controllers
 {
@@ -41,12 +43,22 @@ namespace LakeXplorerProject.Controllers
             return View(lakeSightings);
 
         }
+        //public async Task<IActionResult> AllLakeSightings(int LakeSightingId)
+        //{
+        //    var allLakes = await _service.GetAllAsync();
+        //    int initialLikeCount = await _service.GetUpdatedLikeCountAsync(LakeSightingId);
+
+        //    // Assign the initial like count to the ViewBag
+        //    ViewBag.InitialLikeCount = initialLikeCount;
+
+        //    return View(allLakes);
+        //}
         public async Task<IActionResult> AllLakeSightings()
         {
             var allLakes = await _service.GetAllAsync();
+
             return View(allLakes);
         }
-
 
         public async Task<IActionResult> Create()
         {
@@ -177,8 +189,6 @@ namespace LakeXplorerProject.Controllers
         }
 
         [HttpPost]
-        
-       
         public async Task<JsonResult> UnlikePost(int likeId)
         {
             if (!User.Identity.IsAuthenticated)
@@ -186,9 +196,12 @@ namespace LakeXplorerProject.Controllers
                 return Json(new { error = "User not authenticated" });
             }
 
+            Debug.WriteLine("LikeID value: "+likeId);
+
             var user = await _userManager.GetUserAsync(User);
 
-            var like = await _appcontext.Likes.FindAsync(likeId);
+            //var like = await _appcontext.Likes.FindAsync(likeId);
+            var like = await _appcontext.Likes.FirstOrDefaultAsync(l => l.LakeSightingId == likeId);
             if (like == null)
             {
                 return Json(new { error = "Like not found" });
@@ -199,6 +212,26 @@ namespace LakeXplorerProject.Controllers
             var updatedLikeCount = await _service.GetUpdatedLikeCountAsync(like.LakeSightingId);
 
             return Json(new { likeCount = updatedLikeCount });
+        }
+
+
+
+
+        public async Task<JsonResult> LikeCount(int LakeSightingId)
+        {
+
+            var updatedLikeCount = await _service.GetUpdatedLikeCountAsync(LakeSightingId);
+
+            return Json(updatedLikeCount);
+        }
+
+
+        public async Task<IActionResult> UserLikes()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            var userLikes =await _likeService.GetUserLikes(user.Id);
+            return View(userLikes);
         }
 
     }
