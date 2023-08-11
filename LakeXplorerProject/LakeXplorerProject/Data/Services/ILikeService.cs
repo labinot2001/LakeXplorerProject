@@ -8,6 +8,6 @@ namespace LakeXplorerProject.Data.Services
 
         Task LikeLakeSightingAsync(string userId, int lakeSightingId);
         Task UnlikeLakeSightingAsync(string userId, int likeId);
-
+        Task<IEnumerable<Like>> GetUserLikes(string userId);
     }
 }

@@ -6,6 +6,22 @@
     int counter=0;
     ViewData["Title"] = "Home Page";
 }
+<style>
+#img-lakeSighting{
+
+    max-width:500px;
+    height:300px;
+
+}
+
+#img-lakeSighting-zoom{
+
+
+
+}
+
+</style>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,6 +73,7 @@
           <li><a class="nav-link scrollto" asp-action="Index" asp-controller="Lake">Lakes</a></li>
           @if(User.Identity.IsAuthenticated && User.IsInRole("User")){
                         <li><a class="nav-link scrollto" asp-action="Index" asp-controller="LakeSighting">MyLakeSightings</a></li>
+                        <li><a class="nav-link scrollto" asp-action="UserLikes" asp-controller="LakeSighting">MyLikes</a></li>
                         <li><a class="nav-link scrollto" asp-action="AllLakeSightings" asp-controller="LakeSighting">AllLakeSightings</a></li>
                     
           }
@@ -208,10 +225,10 @@ else{
 
                             <div class="col-lg-4 col-md-6 portfolio-item filter-app">
                                 <div class="portfolio-wrap">
-                                    <img src="@imageSrc" class="img-fluid" alt="">
+                                    <img src="@imageSrc" class="img-fluid" id="img-lakeSighting" alt="">
 
                                     <div class="portfolio-links" >
-                                        <a href="@imageSrc" data-gallery="@imageSrc"   class="portfolio-lightbox" title=""><i class="bx bx-plus"></i></a>
+                                        <a href="@imageSrc" data-gallery="@imageSrc"  id="img-lakeSighting-zoom" class="portfolio-lightbox" title=""><i class="bx bx-plus"></i></a>
                                         @*<a href="" title="More Details"><i class="bx bx-link"></i></a>*@
                                     </div>
                                 </div>
